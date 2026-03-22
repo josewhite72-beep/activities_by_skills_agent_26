@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0f2d4a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Skills Agent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<title>Activities By Skills Agent · Generando actividades</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+--navy: #0f2d4a;
+--navy-mid: #1a3f63;
+--teal: #00b896;
+--teal-light: #00d4ac;
+--amber: #f5a623;
+--coral: #ff6b6b;
+--purple: #7c3aed;
+--green: #059669;
+--cream: #faf8f3;
+--text: #1a1a2e;
+--text-muted: #5a6a7a;
+--surface: #ffffff;
+--border: #dde4ed;
+--radius: 14px;
+--shadow: 0 4px 24px rgba(15,45,74,0.10);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; -webkit-text-size-adjust: 100%; }
+body {
+font-family: "DM Sans", sans-serif;
+background: var(--cream);
+color: var(--text);
+min-height: 100dvh;
+display: flex;
+flex-direction: column;
+}
+/* TOP BAR */
+.topbar {
+background: var(--navy);
+color: white;
+padding: 14px 20px 12px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+position: sticky;
+top: 0;
+z-index: 100;
+box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+}
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+width: 34px; height: 34px;
+background: var(--teal);
+border-radius: 9px;
+display: flex; align-items: center; justify-content: center;
+font-family: "Syne", sans-serif;
+font-weight: 800; font-size: 15px; color: var(--navy);
+}
+.brand-text { font-family: "Syne", sans-serif; font-weight: 700; font-size: 17px; color: white; }
+.brand-sub { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 300; letter-spacing: 0.5px; }
+.btn-back {
+background: rgba(255,255,255,0.1);
+border: 1px solid rgba(255,255,255,0.15);
+color: white;
+padding: 7px 14px;
+border-radius: 8px;
+font-family: "Syne", sans-serif;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+display: flex; align-items: center; gap: 5px;
+}
+/* MAIN */
+.main {
+flex: 1;
+max-width: 680px;
+margin: 0 auto;
+width: 100%;
+padding: 20px 16px 100px;
+}
+/* CONTEXT BANNER */
+.context-banner {
+background: var(--navy);
+border-radius: var(--radius);
+padding: 14px 16px;
+margin-bottom: 20px;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+flex-wrap: wrap;
+}
+.ctx-chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.ctx-chip {
+font-size: 11px; font-weight: 500;
+padding: 4px 10px;
+border-radius: 20px;
+}
+.ctx-grade { background: rgba(0,184,150,0.25); color: var(--teal-light); }
+.ctx-scenario { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+.ctx-theme { background: rgba(245,166,35,0.2); color: #fac862; }
+.ctx-skill { background: rgba(124,58,237,0.25); color: #a78bfa; }
+.ctx-cefr { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); font-style: italic; }
+/* SECTION HEADER */
+.section-header { margin-bottom: 16px; }
+.section-eyebrow {
+font-size: 10px; font-weight: 500; letter-spacing: 1.2px;
+text-transform: uppercase; color: var(--teal); margin-bottom: 4px;
+}
+.section-title {
+font-family: "Syne", sans-serif; font-size: 22px;
+font-weight: 700; color: var(--navy); letter-spacing: -0.5px;
+}
+.section-desc { font-size: 13px; color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
+/* SKILL TAB BAR */
+.skill-tabs {
+display: flex; gap: 6px; margin-bottom: 20px;
+overflow-x: auto; scrollbar-width: none; padding-bottom: 2px;
+}
+.skill-tabs::-webkit-scrollbar { display: none; }
+.skill-tab {
+display: flex; align-items: center; gap: 6px;
+padding: 8px 14px;
+border-radius: 20px;
+border: 1.5px solid var(--border);
+background: var(--surface);
+cursor: pointer;
+font-family: "Syne", sans-serif;
+font-size: 12px; font-weight: 600;
+color: var(--text-muted);
+white-space: nowrap;
+transition: all 0.2s;
+flex-shrink: 0;
+}
+.skill-tab.active {
+background: var(--navy); color: white; border-color: var(--navy);
+}
+.skill-tab.done {
+border-color: var(--teal);
+color: var(--teal);
+}
+.skill-tab.done .tab-dot { background: var(--teal); }
+.tab-dot {
+width: 7px; height: 7px; border-radius: 50%;
+background: var(--border);
+}
+/* LOADING STATE */
+.loading-card {
+background: var(--surface);
+border: 1.5px solid var(--border);
+border-radius: var(--radius);
+padding: 28px 20px;
+text-align: center;
+box-shadow: var(--shadow);
+margin-bottom: 16px;
+}
+.loading-spinner {
+width: 40px; height: 40px;
+border: 3px solid var(--border);
+border-top-color: var(--teal);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-label {
+font-family: "Syne", sans-serif;
+font-size: 14px; font-weight: 600; color: var(--navy);
+margin-bottom: 6px;
+}
+.loading-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.loading-steps {
+margin-top: 16px; text-align: left;
+display: flex; flex-direction: column; gap: 8px;
+}
+.loading-step {
+display: flex; align-items: center; gap: 10px;
+padding: 8px 12px;
+border-radius: 10px;
+font-size: 12px; color: var(--text-muted);
+background: #f8f9fa;
+}
+.loading-step.active {
+background: rgba(0,184,150,0.08);
+color: var(--navy); font-weight: 500;
+}
+.loading-step.done { color: var(--teal); }
+.step-status { font-size: 14px; width: 20px; text-align: center; }
+/* ACTIVITY CARDS */
+.activity-card {
+background: var(--surface);
+border: 1.5px solid var(--border);
+border-radius: var(--radius);
+margin-bottom: 14px;
+box-shadow: var(--shadow);
+overflow: hidden;
+animation: fadeSlideIn 0.3s ease-out;
+}
+@keyframes fadeSlideIn {
+from { opacity: 0; transform: translateY(12px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.activity-header {
+padding: 14px 16px;
+border-bottom: 1px solid var(--border);
+display: flex; align-items: flex-start; gap: 12px;
+}
+.activity-num {
+width: 30px; height: 30px;
+border-radius: 9px;
+background: var(--navy);
+color: white;
+display: flex; align-items: center; justify-content: center;
+font-family: "Syne", sans-serif;
+font-size: 13px; font-weight: 700;
+flex-shrink: 0;
+}
+.activity-header-text { flex: 1; }
+.activity-type-badge {
+font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+text-transform: uppercase;
+padding: 3px 8px; border-radius: 20px;
+margin-bottom: 4px; display: inline-block;
+}
+.activity-title {
+font-family: "Syne", sans-serif;
+font-size: 15px; font-weight: 700; color: var(--navy);
+line-height: 1.3;
+}
+.activity-body { padding: 16px; }
+.activity-body p {
+font-size: 14px; color: var(--text);
+line-height: 1.65; margin-bottom: 10px;
+}
+.activity-body p:last-child { margin-bottom: 0; }
+.activity-body strong { color: var(--navy); font-weight: 500; }
+.activity-body ul, .activity-body ol {
+padding-left: 20px; margin: 8px 0 10px;
+display: flex; flex-direction: column; gap: 4px;
+}
+.activity-body li {
+font-size: 14px; color: var(--text); line-height: 1.5;
+}
+.activity-section-label {
+font-family: "Syne", sans-serif;
+font-size: 10px; font-weight: 600; letter-spacing: 1px;
+text-transform: uppercase; color: var(--text-muted);
+margin: 14px 0 6px;
+}
+.activity-vocab {
+display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px;
+}
+.vocab-pill {
+font-size: 11px; padding: 3px 9px;
+background: rgba(15,45,74,0.07);
+border-radius: 20px; color: var(--navy);
+font-weight: 500;
+}
+.rubric-table {
+width: 100%;
+border-collapse: collapse;
+font-size: 12px; margin-top: 6px;
+border-radius: 8px; overflow: hidden;
+}
+.rubric-table th {
+background: var(--navy); color: white;
+padding: 7px 10px; text-align: left;
+font-family: "Syne", sans-serif; font-weight: 600;
+font-size: 11px;
+}
+.rubric-table td {
+padding: 7px 10px;
+border-bottom: 1px solid var(--border);
+vertical-align: top; line-height: 1.4;
+}
+.rubric-table tr:last-child td { border-bottom: none; }
+.rubric-table tr:nth-child(even) td { background: #f8fafd; }
+/* SKILL COLOR CODING */
+.skill-listening .activity-num { background: #0369a1; }
+.skill-listening .activity-type-badge { background: rgba(3,105,161,0.1); color: #0369a1; }
+.skill-speaking .activity-num { background: #7c3aed; }
+.skill-speaking .activity-type-badge { background: rgba(124,58,237,0.1); color: #7c3aed; }
+.skill-reading .activity-num { background: #059669; }
+.skill-reading .activity-type-badge { background: rgba(5,150,105,0.1); color: #059669; }
+.skill-writing .activity-num { background: #d97706; }
+.skill-writing .activity-type-badge { background: rgba(217,119,6,0.1); color: #d97706; }
+.skill-mediation .activity-num { background: #be185d; }
+.skill-mediation .activity-type-badge { background: rgba(190,24,93,0.1); color: #be185d; }
+/* BOTTOM BAR */
+.bottom-bar {
+position: fixed; bottom: 0; left: 0; right: 0;
+background: rgba(250,248,243,0.96);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+box-shadow: 0 -1px 0 var(--border), 0 -8px 24px rgba(15,45,74,0.08);
+z-index: 50;
+}
+.bottom-row {
+max-width: 680px; margin: 0 auto;
+display: flex; gap: 10px;
+}
+.btn-export {
+flex: 1; padding: 14px 18px;
+border: none; border-radius: var(--radius);
+font-family: "Syne", sans-serif;
+font-size: 14px; font-weight: 700;
+cursor: pointer; transition: all 0.2s;
+display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.btn-export:active { transform: scale(0.97); }
+.btn-export-pdf {
+background: var(--navy); color: white;
+}
+.btn-export-doc {
+background: rgba(0,184,150,0.12);
+color: var(--teal);
+border: 1.5px solid rgba(0,184,150,0.3);
+}
+.btn-export:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+.btn-export.ready { background: linear-gradient(135deg, var(--teal) 0%, #00a382 100%) !important; color: var(--navy) !important; box-shadow: 0 4px 20px rgba(0,184,150,0.35); }
+/* REGENERATE */
+.regen-row {
+max-width: 680px; margin: 0 auto 14px;
+display: flex; gap: 10px; justify-content: flex-end;
+}
+.btn-regen {
+display: flex; align-items: center; gap: 6px;
+padding: 8px 14px;
+border: 1.5px solid var(--border);
+border-radius: 20px;
+background: var(--surface);
+font-size: 12px; font-weight: 500;
+color: var(--text-muted);
+cursor: pointer; transition: all 0.2s;
+}
+.btn-regen:hover { border-color: var(--teal); color: var(--teal); }
+/* ERROR */
+.error-card {
+background: #fff5f5; border: 1.5px solid #fed7d7;
+border-radius: var(--radius); padding: 20px;
+margin-bottom: 16px; text-align: center;
+}
+.error-icon { font-size: 32px; margin-bottom: 10px; }
+.error-title { font-family: "Syne", sans-serif; font-size: 15px; font-weight: 700; color: #c53030; margin-bottom: 6px; }
+.error-msg { font-size: 13px; color: #744210; line-height: 1.5; }
+/* STREAMING TEXT */
+.streaming-text { display: inline; }
+.cursor { display: inline-block; width: 2px; height: 14px; background: var(--teal); animation: blink 1s infinite; vertical-align: middle; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+/* API KEY PROMPT */
+.apikey-card {
+background: var(--surface);
+border: 1.5px solid var(--border);
+border-radius: var(--radius);
+padding: 24px 20px;
+box-shadow: var(--shadow);
+margin-bottom: 20px;
+}
+.apikey-title {
+font-family: "Syne", sans-serif; font-size: 18px; font-weight: 700; color: var(--navy);
+margin-bottom: 6px;
+}
+.apikey-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+.apikey-input-wrap { position: relative; margin-bottom: 12px; }
+.apikey-input-wrap input {
+width: 100%; padding: 12px 44px 12px 14px;
+border: 1.5px solid var(--border); border-radius: var(--radius);
+font-family: "DM Sans", sans-serif; font-size: 14px;
+outline: none; transition: border-color 0.2s;
+background: var(--surface); color: var(--text);
+}
+.apikey-input-wrap input:focus { border-color: var(--teal); }
+.apikey-toggle {
+position: absolute; right: 12px; top: 50%;
+transform: translateY(-50%);
+background: none; border: none; cursor: pointer;
+font-size: 18px; color: var(--text-muted);
+}
+.btn-start {
+width: 100%; padding: 14px;
+background: var(--navy); color: white; border: none;
+border-radius: var(--radius);
+font-family: "Syne", sans-serif; font-size: 15px; font-weight: 700;
+cursor: pointer; transition: all 0.2s;
+}
+.btn-start:active { transform: scale(0.98); }
+.btn-start:disabled { opacity: 0.4; cursor: not-allowed; }
+.apikey-note {
+font-size: 11px; color: var(--text-muted);
+margin-top: 10px; text-align: center; line-height: 1.5;
+}
+.apikey-note a { color: var(--teal); text-decoration: none; }
+/* PRINT */
+@media print {
+.topbar, .bottom-bar, .skill-tabs, .btn-regen, .regen-row,
+.context-banner, .section-header, .apikey-card { display: none !important; }
+.activity-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+body { background: white; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-brand">
+<div class="logo-mark">AG</div>
+<div>
+<div class="brand-text">Activities By Skills Agent</div>
+<div class="brand-sub">Desarrollado por José R. White · Panamá</div>
+</div>
+</div>
+<button class="btn-back" onclick="goBack()">← Formulario</button>
+</header>
+<main class="main" id="mainContent">
+<!-- RENDERED BY JS -->
+</main>
+<div class="bottom-bar" id="bottomBar" style="display:none;">
+<div class="bottom-row">
+<button class="btn-export btn-export-pdf" id="btnExportPage" onclick="window.location.href='export.html'" disabled style="background:var(--navy);color:white;font-size:14px;padding:15px;">
+📦 Exportar actividades →
+</button>
+<div style="display:flex;gap:8px;">
+<button class="btn-export btn-export-pdf" id="btnPDF" onclick="exportPDF()" disabled style="flex:1;font-size:12px;padding:11px 8px;">
+🖨️ Imprimir
+</button>
+<button class="btn-export btn-export-doc" id="btnCopy" onclick="copyAll()" disabled style="flex:1;font-size:12px;padding:11px 8px;">
+📋 Copiar
+</button>
+</div>
+</div>
+</div>
+<script>
+// ══════════════════════════════════════════════════════
+// CURRICULUM DATA (embedded)
+// ══════════════════════════════════════════════════════
+const FULL_CURRICULUM = {"Pre-K":{"level":"Pre A1.1","scenarios":[{"id":1,"title":"Meeting New Friends","themes":["Meeting My Friends","Saying Please and Thank You"],"standards":{"listening":{"receptive":"Recognize that people are speaking in English.","interactive":"Respond to basic greetings."},"reading":{"reading":"Identify characters in a picture book.","phonemic_awareness":"Identify environmental sounds and speech sounds."},"speaking":{"productive":"Use simple words and gestures to communicate.","interactive":"Respond to basic greetings."},"writing":{"productive":"Scribble to communicate a message.","interactive":"Draw a symbol or image as a response to something."},"mediation":{"text":"Mimic simple actions shown in picture books."}},"competences":{"linguistic":{"grammar":["Subject + Verb (e.g., 'I am [name].')","WH-questions (e.g., 'What is your name?')","Yes/No Questions (e.g., 'Are you Mariana?')"],"vocabulary":["friend","teacher","name","class","say","is","play","wave","meet","nice","happy","please","hello","goodbye","thank you"],"pronunciation":["Syllable stress in 'friends' and 'goodbye'","Initial /f/ in 'friend', /g/ in 'goodbye'","Environmental sounds (e.g., voices saying 'hello')"]},"pragmatic":["Exchanging greetings: 'hello' and 'goodbye'","Using polite expressions: 'please' and 'thank you'"],"sociolinguistic":["Politeness in greetings: saying 'hello', 'goodbye', 'please', 'thank you'"]},"assessment":["Observe students' responses to greetings and polite phrases.","Check if students can name a character who says 'please' or 'thank you'.","Assess drawings representing greetings or polite interactions."]}]},"Kinder":{"level":"Pre A1.2","scenarios":[{"id":1,"title":"It's a School Day!","themes":["Let's Listen!","Stand Up!"]}]},"Grade 1":{"level":"Pre A1.3","scenarios":[{"id":1,"title":"All Week Long!","themes":["Today Is Tuesday!","It's the Weekend."]}]},"Grade 2":{"level":"Pre A1.4","scenarios":[{"id":1,"title":"School Days","themes":["Yesterday Was Wednesday.","Today Is Friday!"]}]},"Grade 3":{"level":"A1.1","scenarios":[{"id":1,"title":"Places I Can Go","themes":["I'm at School.","I'm at the Market."]}]},"Grade 4":{"level":"A1.2","scenarios":[{"id":1,"title":"A Walk in the Neighborhood","themes":["This Is My Favorite.","It's the Best!"]}]},"Grade 5":{"level":"A1.3","scenarios":[{"id":1,"title":"Following Instructions at School","themes":["First, I Cut the Paper.","Let's Make a Poster!"]}]},"Grade 6":{"level":"A2.1","scenarios":[{"id":1,"title":"Our Community News","themes":["Reporting From the School!","Our Community Is Famous For..."]}]}};
+
+const SECONDARY_CURRICULUM = {"Grade 7":{"level":"A2.2","scenarios":[{"id":1,"title":"Our New Classmates","themes":["Where are you from?","What was Your Previous School Like?"]}]},"Grade 8":{"level":"A2.3","scenarios":[{"id":1,"title":"Cultural Connections","themes":["I Celebrate This Tradition Because...","In This Region, They Have a Custom Of..."]}]},"Grade 9":{"level":"A2.4","scenarios":[{"id":1,"title":"A Guide to Panama","themes":["Our Historical Sites","Take a Trip to the Panama Canal"]}]},"Grade 10":{"level":"B1.1","scenarios":[{"id":1,"title":"Let's Start a Club!","themes":["There Are So Many Types of Clubs!","Learning to Manage a Club"]}]},"Grade 11":{"level":"B1.2","scenarios":[{"id":1,"title":"Our Town Council","themes":["How Our Town Operates","How We Share Our Voice in the Community"]}]},"Grade 12":{"level":"B1.3","scenarios":[{"id":1,"title":"Supporting Our Community","themes":["How Does the Government Support Communities?","Volunteering in Our Community"]}]}};
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let request = null;
+let generatedActivities = {};
+let currentSkillIndex = 0;
+let apiKey = '';
+let outputLang = 'es';
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+const stored = sessionStorage.getItem('englishgen_request');
+if (!stored) {
+showNoRequest();
+return;
+}
+request = JSON.parse(stored);
+const savedKey = sessionStorage.getItem('englishgen_apikey');
+if (savedKey) {
+apiKey = savedKey;
+initGenerator();
+} else {
+showApiKeyPrompt();
+}
+});
+
+function showNoRequest() {
+document.getElementById('mainContent').innerHTML = `
+<div style="text-align:center;padding:60px 20px;">
+<div style="font-size:48px;margin-bottom:16px;">🔍</div>
+<div class="section-title" style="margin-bottom:8px;">Sin datos de formulario</div>
+<div class="section-desc">Regresa al formulario para configurar la solicitud.</div>
+<button onclick="goBack()" style="margin-top:20px;padding:12px 24px;background:var(--navy);color:white;border:none;border-radius:var(--radius);font-family:Syne,sans-serif;font-weight:700;font-size:14px;cursor:pointer;">
+← Ir al formulario
+</button>
+</div>`;
+}
+
+function showApiKeyPrompt() {
+document.getElementById('mainContent').innerHTML = `
+<div style="padding-top:10px;">
+<div class="section-header">
+<div class="section-eyebrow">Configuración inicial</div>
+<div class="section-title">Ingresa tu API Key</div>
+<div class="section-desc">Necesaria para generar las actividades con IA. Se guarda localmente en tu dispositivo.</div>
+</div>
+<div class="apikey-card">
+<div class="apikey-title">🔑 DeepSeek API Key</div>
+<div class="apikey-desc">
+Tu API key se usa directamente desde el dispositivo para llamar a Claude.
+Tu DeepSeek API key se usa directamente desde tu dispositivo. Los créditos iniciales son gratuitos.
+</div>
+<div class="apikey-input-wrap">
+<input type="password" id="apikeyInput" placeholder="Token de acceso o sk-... (API key)"
+oninput="document.getElementById('btnGo').disabled = this.value.length < 20"
+/>
+<button class="apikey-toggle" onclick="toggleKeyVisibility()">👁</button>
+</div>
+<button class="btn-start" id="btnGo" onclick="saveKeyAndGo()" disabled>
+✨ Generar actividades
+</button>
+<div class="apikey-note">
+Obtén tu key en <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a><br>
+La key empieza con <strong>sk-...</strong> · Se borra al cerrar el navegador
+</div>
+</div>
+</div>`;
+}
+
+function toggleKeyVisibility() {
+const input = document.getElementById('apikeyInput');
+input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+function saveKeyAndGo() {
+apiKey = document.getElementById('apikeyInput').value.trim();
+sessionStorage.setItem('englishgen_apikey', apiKey);
+initGenerator();
+}
+
+// ══════════════════════════════════════════════════════
+// INIT GENERATOR
+// ══════════════════════════════════════════════════════
+function initGenerator() {
+const main = document.getElementById('mainContent');
+const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+const themeStr = request.themes.join(' · ');
+main.innerHTML = `
+<div class="context-banner">
+<div class="ctx-chips">
+<span class="ctx-chip ctx-grade">${request.grade}</span>
+<span class="ctx-chip ctx-cefr">${request.cefrLevel}</span>
+<span class="ctx-chip ctx-scenario">S${request.scenarioId}: ${request.scenarioTitle}</span>
+${request.themes.map(t => `<span class="ctx-chip ctx-theme">${t}</span>`).join('')}
+${request.skills.map(s => `<span class="ctx-chip ctx-skill">${skillEmojis[s]} ${s}</span>`).join('')}
+</div>
+</div>
+<div class="section-header">
+<div class="section-eyebrow">Actividades generadas con IA</div>
+<div class="section-title">Listas para el aula</div>
+<div class="section-desc">Alineadas al Currículo Nacional de Panamá · ${request.grade} · ${request.cefrLevel}</div>
+</div>
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px;">
+<div class="skill-tabs" id="skillTabs" style="margin-bottom:0; flex:1;"></div>
+<div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+<span style="font-size:11px; color:var(--text-muted); font-weight:500;">Idioma:</span>
+<button id="langToggle" onclick="toggleLang()" style="
+display:flex; align-items:center; gap:5px;
+padding:7px 12px;
+border-radius:20px;
+border:1.5px solid var(--teal);
+background:rgba(0,184,150,0.1);
+color:var(--teal);
+font-family:Syne,sans-serif;
+font-size:12px; font-weight:700;
+cursor:pointer; transition:all .2s;
+white-space:nowrap;
+">🇪🇸 ES</button>
+</div>
+</div>
+<div class="regen-row">
+<button class="btn-regen" onclick="regenerateAll()">↺ Regenerar todo</button>
+<button class="btn-regen" onclick="regenerateCurrent()">↺ Regenerar skill activo</button>
+</div>
+<div id="activitiesContainer"></div>
+`;
+buildSkillTabs();
+document.getElementById('bottomBar').style.display = 'block';
+generateNextSkill();
+}
+
+function buildSkillTabs() {
+const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+const tabs = document.getElementById('skillTabs');
+request.skills.forEach((skill, i) => {
+const btn = document.createElement('button');
+btn.className = 'skill-tab' + (i === 0 ? ' active' : '');
+btn.id = 'tab-' + skill;
+btn.innerHTML = `<span class="tab-dot"></span>${skillEmojis[skill]} ${skill.charAt(0).toUpperCase()+skill.slice(1)}`;
+btn.onclick = () => scrollToSkill(skill);
+tabs.appendChild(btn);
+});
+}
+
+// ══════════════════════════════════════════════════════
+// CURRICULUM LOOKUP
+// ══════════════════════════════════════════════════════
+function getCurriculumContext(grade, scenarioId, skills) {
+const gradeData = FULL_CURRICULUM[grade] || SECONDARY_CURRICULUM[grade];
+if (!gradeData) return {};
+const scenario = gradeData.scenarios.find(s => s.id === scenarioId);
+if (!scenario) return {};
+const relevantStandards = {};
+skills.forEach(skill => {
+if (scenario.standards[skill]) {
+relevantStandards[skill] = scenario.standards[skill];
+}
+});
+return {
+cefrLevel: gradeData.level,
+scenarioTitle: scenario.title,
+themes: scenario.themes,
+standards: relevantStandards,
+competences: scenario.competences,
+assessment: scenario.assessment
+};
+}
+
+// ══════════════════════════════════════════════════════
+// PROMPT BUILDER - ✅ CORREGIDO
+// ══════════════════════════════════════════════════════
+function buildPrompt(skill, ctx) {
+const standards = ctx.standards[skill];
+const ling = ctx.competences?.linguistic || {};
+
+// ✅ CORRECCIÓN: Normalizar pragmatic y sociolinguistic a arrays
+// En secundaria estos valores a veces son strings, no arrays
+let pragmaRaw = ctx.competences?.pragmatic || [];
+let socioRaw = ctx.competences?.sociolinguistic || [];
+
+// Convertir a array según el tipo
+let pragma = [];
+if (Array.isArray(pragmaRaw)) {
+pragma = pragmaRaw;
+} else if (typeof pragmaRaw === 'object') {
+// Secundaria: extraer valores del objeto
+pragma = Object.values(pragmaRaw).filter(v => typeof v === 'string');
+} else if (typeof pragmaRaw === 'string') {
+pragma = [pragmaRaw];
+}
+
+let socio = [];
+if (Array.isArray(socioRaw)) {
+socio = socioRaw;
+} else if (typeof socioRaw === 'string') {
+socio = [socioRaw];
+} else if (typeof socioRaw === 'object') {
+socio = Object.values(socioRaw).filter(v => typeof v === 'string');
+}
+
+const stdText = standards ? Object.entries(standards)
+.map(([k, v]) => `  - ${k}: ${v}`).join('\n') : '';
+
+const grammarRaw = ling.grammar || [];
+const grammarText = Array.isArray(grammarRaw) ? grammarRaw.join('; ') : 
+typeof grammarRaw === 'string' ? grammarRaw : 
+Object.values(grammarRaw).flat().join('; ');
+
+const vocabRaw = ling.vocabulary || [];
+const vocabArr = Array.isArray(vocabRaw) ? vocabRaw :
+typeof vocabRaw === 'string' ? [vocabRaw] :
+Object.entries(vocabRaw).map(([k,v]) => k + ': ' + (Array.isArray(v) ? v.join(', ') : v));
+const vocabText = vocabArr.slice(0, 20).join(', ');
+
+const pronounceRaw = ling.pronunciation || [];
+const pronounceText = Array.isArray(pronounceRaw) ? pronounceRaw.join('; ') : 
+typeof pronounceRaw === 'string' ? pronounceRaw :
+Object.values(pronounceRaw).flat().join('; ');
+
+// ✅ AHORA FUNCIONA: pragma y socio siempre son arrays
+const pragmaText = pragma.filter(p => p && typeof p === 'string').join('; ');
+const socioText = socio.filter(s => s && typeof s === 'string').join('; ');
+
+const themeText = request.themes.join(' / ');
+
+const smartSection = request.smartObjectives ? `\nSMART OBJECTIVES:\n${request.smartObjectives}` : '';
+const outcomesSection = request.learningOutcomes ? `\nLEARNING OUTCOMES:\n${request.learningOutcomes}` : '';
+const contextSection = request.additionalContext ? `\nADDITIONAL CONTEXT:\n${request.additionalContext}` : '';
+
+const skillMap = {
+listening: 'Listening',
+speaking: 'Speaking',
+reading: 'Reading & Phonemic Awareness',
+writing: 'Writing',
+mediation: 'Mediation'
+};
+
+return `You are an expert English language curriculum designer for Panama's National English Curriculum (Pre-K to Grade 12). Generate READY-TO-USE classroom activities in SPANISH (teacher instructions) with English content.
+
+## CURRICULUM CONTEXT
+- Grade: ${request.grade}
+- CEFR Level: ${ctx.cefrLevel}
+- Scenario ${request.scenarioId}: ${ctx.scenarioTitle}
+- Theme(s): ${themeText}
+- Target Skill: ${skillMap[skill] || skill}
+
+## OFFICIAL STANDARDS
+${stdText}
+
+## LINGUISTIC COMPETENCES
+- Grammar: ${grammarText}
+- Key Vocabulary: ${vocabText}
+- Pronunciation: ${pronounceText}
+- Pragmatic: ${pragmaText}
+- Sociolinguistic: ${socioText}
+${smartSection}${outcomesSection}${contextSection}
+
+## YOUR TASK
+Generate exactly 3 classroom activities for "${skillMap[skill]||skill}" that:
+1. Are DIRECTLY aligned to the standards
+2. Use the vocabulary and grammar specified
+3. Are age-appropriate for ${request.grade} at CEFR ${ctx.cefrLevel}
+4. Connect to Panama's culture and scenario themes
+5. Are immediately usable WITHOUT textbook
+
+LANGUAGE: ${outputLang === 'en' ? 'Generate ALL teacher instructions IN ENGLISH.' : 'Generate ALL teacher instructions IN SPANISH.'}
+
+## REQUIRED OUTPUT FORMAT (JSON only, no markdown):
+{
+"skill": "${skill}",
+"activities": [
+{
+"number": 1,
+"type": "activity type",
+"title": "activity title",
+"objective": "one sentence objective",
+"time": "minutes",
+"materials": ["material1", "material2"],
+"procedure": ["Step 1", "Step 2"],
+"language_focus": {
+"vocabulary": ["word1", "word2"],
+"grammar_structure": "grammar note",
+"example_utterances": ["Student says: ..."]
+},
+"differentiation": {
+"support": "for struggling students",
+"extension": "for advanced students"
+},
+"assessment": "how to assess"
+}
+],
+"rubric": {
+"criteria": [
+{"criterion": "criterion", "excellent": "4", "proficient": "3", "developing": "2", "beginning": "1"}
+]
+}
+}`;
+}
+
+// ══════════════════════════════════════════════════════
+// GENERATE — sequential per skill
+// ══════════════════════════════════════════════════════
+async function generateNextSkill() {
+if (currentSkillIndex >= request.skills.length) {
+enableExport();
+return;
+}
+const skill = request.skills[currentSkillIndex];
+const ctx = getCurriculumContext(request.grade, request.scenarioId, request.skills);
+showSkillLoading(skill);
+try {
+const result = await callClaudeAPI(skill, ctx);
+renderSkillActivities(skill, result);
+generatedActivities[skill] = result;
+const tab = document.getElementById('tab-' + skill);
+if (tab) { tab.classList.remove('active'); tab.classList.add('done'); }
+currentSkillIndex++;
+if (currentSkillIndex < request.skills.length) {
+const nextTab = document.getElementById('tab-' + request.skills[currentSkillIndex]);
+if (nextTab) nextTab.classList.add('active');
+}
+await generateNextSkill();
+} catch (err) {
+showSkillError(skill, err.message);
+}
+}
+
+async function callClaudeAPI(skill, ctx) {
+const prompt = buildPrompt(skill, ctx);
+const docenteToken = sessionStorage.getItem('docente_token');
+const useProxy = !!docenteToken;
+const messages = [
+{ role: 'system', content: 'You are an expert English language curriculum designer for Panama. Always respond with valid JSON only, no markdown, no extra text.' },
+{ role: 'user', content: prompt }
+];
+let response;
+if (useProxy) {
+response = await fetch('/api/generate', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({
+accessToken: docenteToken,
+messages,
+max_tokens: 4000,
+skillContext: skill,
+gradeContext: request.grade,
+})
+});
+} else {
+response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': 'Bearer ' + apiKey
+},
+body: JSON.stringify({
+model: 'deepseek-chat',
+max_tokens: 4000,
+temperature: 0.7,
+messages,
+})
+});
+}
+if (!response.ok) {
+const errData = await response.json().catch(() => ({}));
+if (response.status === 429) throw new Error(errData.error || 'Límite de uso alcanzado');
+if (response.status === 401) throw new Error('Token inválido. Contacta al administrador.');
+throw new Error(errData.error?.message || errData.error || 'API error ' + response.status);
+}
+const data = await response.json();
+const text = data.choices[0]?.message?.content || '';
+let cleaned = text.trim();
+if (cleaned.startsWith('```')) {
+cleaned = cleaned.replace(/^```json?\n?/, '').replace(/\n?```$/, '');
+}
+try {
+return JSON.parse(cleaned);
+} catch (e) {
+const match = cleaned.match(/\{[\s\S]*\}/);
+if (match) return JSON.parse(match[0]);
+throw new Error('No se pudo parsear la respuesta de IA. Intenta regenerar.');
+}
+}
+
+function showSkillLoading(skill) {
+const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+const skillColors = { listening:'#0369a1', speaking:'#7c3aed', reading:'#059669', writing:'#d97706', mediation:'#be185d' };
+const container = document.getElementById('activitiesContainer');
+const loadId = 'loading-' + skill;
+const existing = document.getElementById(loadId);
+if (existing) existing.remove();
+const el = document.createElement('div');
+el.id = loadId;
+el.className = 'loading-card';
+el.innerHTML = `
+<div class="loading-spinner" style="border-top-color:${skillColors[skill]||'var(--teal)'}"></div>
+<div class="loading-label">${skillEmojis[skill]} Generando actividades de ${skill.charAt(0).toUpperCase()+skill.slice(1)}...</div>
+<div class="loading-sub">
+Analizando el currículo · ${request.grade} · ${request.cefrLevel}<br>
+Escenario: ${request.scenarioTitle}
+</div>
+<div class="loading-steps">
+<div class="loading-step done"><span class="step-status">✓</span> Cargando standards del currículo</div>
+<div class="loading-step done"><span class="step-status">✓</span> Construyendo prompt pedagógico</div>
+<div class="loading-step active"><span class="step-status">⏳</span> DeepSeek V3 está generando las actividades</div>
+<div class="loading-step"><span class="step-status">○</span> Formateando para el aula</div>
+</div>
+`;
+container.appendChild(el);
+el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderSkillActivities(skill, data) {
+const container = document.getElementById('activitiesContainer');
+const loading = document.getElementById('loading-' + skill);
+if (loading) loading.remove();
+if (!data || !data.activities) {
+showSkillError(skill, 'Respuesta incompleta del generador');
+return;
+}
+const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+const skillLabel = skill.charAt(0).toUpperCase() + skill.slice(1);
+const header = document.createElement('div');
+header.id = 'section-' + skill;
+header.style.cssText = 'margin: 20px 0 12px;';
+header.innerHTML = `
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+<span style="font-size:20px;">${skillEmojis[skill]}</span>
+<span style="font-family:Syne,sans-serif;font-size:17px;font-weight:700;color:var(--navy);">${skillLabel}</span>
+<span style="font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(15,45,74,0.08);color:var(--text-muted);">${data.activities.length} actividades</span>
+</div>
+<div style="font-size:12px;color:var(--text-muted);">
+Alineadas al estándar ${request.grade} · ${skill} · ${request.cefrLevel}
+</div>
+`;
+container.appendChild(header);
+data.activities.forEach((act, i) => {
+const card = document.createElement('div');
+card.className = `activity-card skill-${skill}`;
+const vocabHtml = (act.language_focus?.vocabulary || []).map(v =>
+`<span class="vocab-pill">${v}</span>`).join('');
+const procHtml = (act.procedure || []).map((step, idx) =>
+`<li>${step}</li>`).join('');
+const materialsHtml = (act.materials || []).map(m => `<li>${m}</li>`).join('');
+const utterHtml = (act.language_focus?.example_utterances || []).map(u =>
+`<li style="font-style:italic;color:var(--navy)">${u}</li>`).join('');
+card.innerHTML = `
+<div class="activity-header">
+<div class="activity-num">${i + 1}</div>
+<div class="activity-header-text">
+<span class="activity-type-badge">${act.type || skillLabel}</span>
+<div class="activity-title">${act.title}</div>
+</div>
+<div style="font-size:11px;color:var(--text-muted);white-space:nowrap;">⏱ ${act.time || '?'} min</div>
+</div>
+<div class="activity-body">
+<p><strong>Objetivo:</strong> ${act.objective || ''}</p>
+${act.materials && act.materials.length > 0 ? `
+<div class="activity-section-label">Materiales</div>
+<ul>${materialsHtml}</ul>
+` : ''}
+<div class="activity-section-label">Procedimiento</div>
+<ol>${procHtml}</ol>
+${act.language_focus ? `
+<div class="activity-section-label">Enfoque lingüístico</div>
+${vocabHtml ? `<div class="activity-vocab">${vocabHtml}</div>` : ''}
+${act.language_focus.grammar_structure ? `<p><strong>Gramática:</strong> ${act.language_focus.grammar_structure}</p>` : ''}
+${utterHtml ? `<ul>${utterHtml}</ul>` : ''}
+` : ''}
+${act.differentiation ? `
+<div class="activity-section-label">Diferenciación</div>
+<p>🟡 <strong>Apoyo:</strong> ${act.differentiation.support}</p>
+<p>🟢 <strong>Extensión:</strong> ${act.differentiation.extension}</p>
+` : ''}
+<div class="activity-section-label">Evaluación</div>
+<p>${act.assessment || ''}</p>
+</div>
+`;
+container.appendChild(card);
+});
+if (data.rubric && data.rubric.criteria && data.rubric.criteria.length > 0) {
+const rubricCard = document.createElement('div');
+rubricCard.className = 'activity-card';
+rubricCard.style.marginBottom = '24px';
+const rubricRows = data.rubric.criteria.map(c => `
+<tr>
+<td><strong>${c.criterion}</strong></td>
+<td>${c.excellent || ''}</td>
+<td>${c.proficient || ''}</td>
+<td>${c.developing || ''}</td>
+<td>${c.beginning || ''}</td>
+</tr>
+`).join('');
+rubricCard.innerHTML = `
+<div class="activity-header">
+<div class="activity-num" style="background:#64748b;">R</div>
+<div class="activity-header-text">
+<span class="activity-type-badge" style="background:rgba(100,116,139,0.1);color:#64748b;">RUBRIC</span>
+<div class="activity-title">Rúbrica de evaluación — ${skillLabel}</div>
+</div>
+</div>
+<div class="activity-body">
+<div style="overflow-x:auto;">
+<table class="rubric-table">
+<thead>
+<tr>
+<th>Criterio</th><th>Excelente (4)</th><th>Competente (3)</th><th>En desarrollo (2)</th><th>Inicial (1)</th>
+</tr>
+</thead>
+<tbody>${rubricRows}</tbody>
+</table>
+</div>
+</div>
+`;
+container.appendChild(rubricCard);
+}
+}
+
+function showSkillError(skill, msg) {
+const container = document.getElementById('activitiesContainer');
+const loading = document.getElementById('loading-' + skill);
+if (loading) loading.remove();
+const el = document.createElement('div');
+el.className = 'error-card';
+el.innerHTML = `
+<div class="error-icon">⚠️</div>
+<div class="error-title">Error generando ${skill}</div>
+<div class="error-msg">${msg}</div>
+<button onclick="retrySkill('${skill}')" style="margin-top:12px;padding:10px 20px;background:var(--navy);color:white;border:none;border-radius:10px;font-family:Syne,sans-serif;font-weight:600;font-size:13px;cursor:pointer;">
+↺ Reintentar
+</button>
+`;
+container.appendChild(el);
+}
+
+async function retrySkill(skill) {
+const ctx = getCurriculumContext(request.grade, request.scenarioId, request.skills);
+const container = document.getElementById('activitiesContainer');
+const cards = container.querySelectorAll('.error-card');
+cards.forEach(c => c.remove());
+showSkillLoading(skill);
+try {
+const result = await callClaudeAPI(skill, ctx);
+renderSkillActivities(skill, result);
+generatedActivities[skill] = result;
+enableExport();
+} catch (err) {
+showSkillError(skill, err.message);
+}
+}
+
+function toggleLang() {
+outputLang = outputLang === 'es' ? 'en' : 'es';
+const btn = document.getElementById('langToggle');
+if (outputLang === 'en') {
+btn.innerHTML = '🇺🇸 EN';
+btn.style.borderColor = '#0369a1';
+btn.style.background = 'rgba(3,105,161,0.1)';
+btn.style.color = '#0369a1';
+} else {
+btn.innerHTML = '🇪🇸 ES';
+btn.style.borderColor = 'var(--teal)';
+btn.style.background = 'rgba(0,184,150,0.1)';
+btn.style.color = 'var(--teal)';
+}
+const toast = document.createElement('div');
+toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--navy);color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-family:Syne,sans-serif;font-weight:600;z-index:999;animation:fadeSlideIn .2s ease-out;';
+toast.textContent = outputLang === 'en' ? '🇺🇸 Próxima generación en inglés' : '🇪🇸 Próxima generación en español';
+document.body.appendChild(toast);
+setTimeout(() => toast.remove(), 2500);
+}
+
+async function regenerateAll() {
+generatedActivities = {};
+currentSkillIndex = 0;
+document.getElementById('activitiesContainer').innerHTML = '';
+document.getElementById('btnPDF').disabled = true;
+document.getElementById('btnCopy').disabled = true;
+request.skills.forEach(s => {
+const tab = document.getElementById('tab-'+s);
+if (tab) { tab.classList.remove('done'); tab.classList.remove('active'); }
+});
+const firstTab = document.getElementById('tab-'+request.skills[0]);
+if (firstTab) firstTab.classList.add('active');
+await generateNextSkill();
+}
+
+async function regenerateCurrent() {
+const activeTab = document.querySelector('.skill-tab.active');
+if (!activeTab) return;
+const skill = activeTab.id.replace('tab-', '');
+await retrySkill(skill);
+}
+
+function scrollToSkill(skill) {
+const section = document.getElementById('section-' + skill);
+if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function enableExport() {
+document.getElementById('btnPDF').disabled = false;
+document.getElementById('btnCopy').disabled = false;
+document.getElementById('btnExportPage').disabled = false;
+document.getElementById('btnExportPage').classList.add('ready');
+sessionStorage.setItem('englishgen_activities', JSON.stringify(generatedActivities));
+}
+
+function exportPDF() {
+window.print();
+}
+
+function copyAll() {
+let text = `ACTIVITIES BY SKILLS AGENT — ACTIVIDADES DE INGLÉS\n`;
+text += `${'='.repeat(50)}\n`;
+text += `Grado: ${request.grade} | CEFR: ${request.cefrLevel}\n`;
+text += `Scenario ${request.scenarioId}: ${request.scenarioTitle}\n`;
+text += `Themes: ${request.themes.join(' / ')}\n`;
+Object.entries(generatedActivities).forEach(([skill, data]) => {
+text += `\n${'─'.repeat(40)}\n`;
+text += `SKILL: ${skill.toUpperCase()}\n`;
+text += `${'─'.repeat(40)}\n`;
+(data.activities || []).forEach((act, i) => {
+text += `Actividad ${i+1}: ${act.title}\n`;
+text += `Tipo: ${act.type} | Tiempo: ${act.time} min\n`;
+text += `Objetivo: ${act.objective}\n`;
+text += `Materiales:\n`;
+(act.materials || []).forEach(m => { text += `  • ${m}\n`; });
+text += `\nProcedimiento:\n`;
+(act.procedure || []).forEach((s, i) => { text += `  ${i+1}. ${s}\n`; });
+text += `\nEvaluación: ${act.assessment}\n`;
+});
+});
+navigator.clipboard.writeText(text).then(() => {
+const btn = document.getElementById('btnCopy');
+const orig = btn.innerHTML;
+btn.innerHTML = '✅ ¡Copiado!';
+setTimeout(() => { btn.innerHTML = orig; }, 2500);
+});
+}
+
+function goBack() {
+window.history.back() || (window.location.href = 'index.html');
+}
+</script>
+</body>
+</html>

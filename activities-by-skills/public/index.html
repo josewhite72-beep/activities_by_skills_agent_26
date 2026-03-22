@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0f2d4a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Skills Agent">
+<meta name="description" content="Generador de actividades de inglés — Currículo Nacional de Panamá Pre-K a 12">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Activities By Skills Agent · Generador de Actividades</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2d4a;
+    --navy-mid: #1a3f63;
+    --teal: #00b896;
+    --teal-light: #00d4ac;
+    --amber: #f5a623;
+    --cream: #faf8f3;
+    --text: #1a1a2e;
+    --text-muted: #5a6a7a;
+    --surface: #ffffff;
+    --border: #dde4ed;
+    --radius: 14px;
+    --shadow: 0 4px 24px rgba(15,45,74,0.10);
+    --shadow-lg: 0 12px 48px rgba(15,45,74,0.16);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { height: 100%; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100%;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--navy);
+    color: white;
+    padding: 14px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  }
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 34px; height: 34px;
+    background: var(--teal);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--navy);
+    flex-shrink: 0;
+  }
+  .brand-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.3px;
+    color: white;
+  }
+  .brand-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+  .badge-cefr {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .badge-cefr.active {
+    background: var(--teal);
+    color: var(--navy);
+    border-color: var(--teal);
+  }
+
+  /* ── PROGRESS STEPS ── */
+  .steps-bar {
+    background: var(--navy-mid);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .steps-bar::-webkit-scrollbar { display: none; }
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .step-dot {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    transition: all 0.3s;
+    font-family: 'Syne', sans-serif;
+  }
+  .step-dot.done { background: var(--teal); border-color: var(--teal); color: var(--navy); }
+  .step-dot.active { background: var(--amber); border-color: var(--amber); color: var(--navy); }
+  .step-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 400;
+    transition: color 0.3s;
+    letter-spacing: 0.3px;
+  }
+  .step-label.active { color: var(--amber); }
+  .step-label.done { color: var(--teal); }
+  .step-connector {
+    width: 16px;
+    height: 1.5px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    flex: 1;
+    padding: 20px 16px 100px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 18px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    line-height: 1.5;
+  }
+
+  /* ── FIELD GROUP ── */
+  .field-group {
+    margin-bottom: 16px;
+  }
+  .field-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: var(--navy);
+    margin-bottom: 7px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .field-label .required {
+    color: var(--teal);
+    font-size: 14px;
+    line-height: 1;
+  }
+  .field-label .optional-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 2px 7px;
+    background: var(--border);
+    border-radius: 20px;
+    letter-spacing: 0.2px;
+  }
+
+  /* ── SELECTS ── */
+  select, textarea, input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(15,45,74,0.05);
+  }
+  select:focus, textarea:focus, input[type="text"]:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,184,150,0.12);
+  }
+  select:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #f0f3f7;
+  }
+  .select-wrap {
+    position: relative;
+  }
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--navy-mid);
+    pointer-events: none;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+    font-size: 14px;
+  }
+
+  /* ── SKILL PICKER ── */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .skill-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(15,45,74,0.04);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .skill-btn:active { transform: scale(0.97); }
+  .skill-btn.selected {
+    border-color: var(--teal);
+    background: rgba(0,184,150,0.07);
+    box-shadow: 0 0 0 3px rgba(0,184,150,0.12);
+  }
+  .skill-btn.selected .skill-icon { background: var(--teal); }
+  .skill-btn.selected .skill-name { color: var(--navy); }
+  .skill-icon {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    background: #eef2f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .skill-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  /* ── THEMES PILLS ── */
+  .theme-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .theme-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    text-align: left;
+  }
+  .theme-pill:active { transform: scale(0.98); }
+  .theme-pill.selected {
+    border-color: var(--amber);
+    background: rgba(245,166,35,0.07);
+    box-shadow: 0 0 0 3px rgba(245,166,35,0.1);
+  }
+  .theme-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .theme-pill.selected .theme-num {
+    background: var(--amber);
+    color: white;
+  }
+  .theme-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.3;
+    font-weight: 400;
+  }
+
+  /* ── CURRICULUM PREVIEW CARD ── */
+  .curriculum-card {
+    background: var(--navy);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: none;
+  }
+  .curriculum-card.visible { display: block; }
+  .curriculum-card::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    background: rgba(0,184,150,0.12);
+    border-radius: 50%;
+  }
+  .curriculum-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .curriculum-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+    flex: 1;
+    margin-right: 8px;
+  }
+  .cefr-pill {
+    flex-shrink: 0;
+    background: var(--teal);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .curriculum-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .curriculum-tag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .curriculum-themes-label {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 5px;
+  }
+  .curriculum-theme-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .curriculum-theme-item:last-child { border-bottom: none; }
+  .curriculum-theme-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+  }
+  .curriculum-theme-item span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.3;
+  }
+
+  /* ── OPTIONAL SECTION ── */
+  .optional-section {
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 16px;
+    background: rgba(250,248,243,0.6);
+  }
+  .optional-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .optional-toggle-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .optional-toggle-label .opt-icon {
+    width: 26px; height: 26px;
+    background: var(--amber);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .optional-chevron {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+  .optional-chevron.open { transform: rotate(180deg); }
+  .optional-body {
+    display: none;
+    padding-top: 14px;
+  }
+  .optional-body.open { display: block; }
+
+  /* ── BOTTOM CTA ── */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(250,248,243,0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+    box-shadow: 0 -1px 0 var(--border), 0 -8px 24px rgba(15,45,74,0.08);
+    z-index: 50;
+  }
+  .cta-row {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .btn-primary {
+    flex: 1;
+    padding: 15px 20px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+    letter-spacing: 0.2px;
+  }
+  .btn-primary:active { transform: scale(0.97); background: var(--navy-mid); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .btn-primary.ready {
+    background: linear-gradient(135deg, var(--teal) 0%, #00a382 100%);
+    color: var(--navy);
+    box-shadow: 0 4px 20px rgba(0,184,150,0.35);
+  }
+  .btn-primary.ready:active { transform: scale(0.97); }
+  .btn-secondary {
+    padding: 15px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-secondary:active { transform: scale(0.95); }
+
+  /* ── SELECTION SUMMARY ── */
+  .selection-summary {
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+  .selection-summary.visible { display: block; }
+  .summary-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .summary-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .summary-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .chip-grade { background: rgba(15,45,74,0.1); color: var(--navy); }
+  .chip-scenario { background: rgba(0,184,150,0.12); color: #007a63; }
+  .chip-theme { background: rgba(245,166,35,0.15); color: #8a5c00; }
+  .chip-skill { background: rgba(99,102,241,0.12); color: #4338ca; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    animation: fadeSlideIn 0.25s ease-out forwards;
+  }
+
+  /* ── SCENARIO CARDS (grid) ── */
+  .scenario-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .scenario-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 13px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .scenario-card:active { transform: scale(0.98); }
+  .scenario-card.selected {
+    border-color: var(--teal);
+    background: rgba(0,184,150,0.06);
+    box-shadow: 0 0 0 3px rgba(0,184,150,0.1);
+  }
+  .scenario-num {
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: #eef2f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .scenario-card.selected .scenario-num {
+    background: var(--teal);
+    color: white;
+  }
+  .scenario-info { flex: 1; min-width: 0; }
+  .scenario-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+  .scenario-themes-preview {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .scenario-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 11px;
+    color: transparent;
+  }
+  .scenario-card.selected .scenario-check {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+  }
+
+  /* ── INSTALL BANNER ── */
+  .install-banner {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    margin: 0 -16px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    display: none;
+  }
+  .install-banner.show { display: flex; }
+  .install-text {
+    flex: 1;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.4;
+  }
+  .install-text strong { color: white; }
+  .install-btn {
+    background: var(--teal);
+    color: var(--navy);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .install-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+  }
+
+  /* ── EMPTY / PLACEHOLDER ── */
+  .placeholder-msg {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* Scrollbar aesthetic */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo-mark">AG</div>
+    <div>
+      <div class="brand-text">Activities By Skills Agent</div>
+      <div class="brand-sub">Desarrollado por José R. White · Panamá</div>
+    </div>
+  </div>
+  <div id="cefrBadge" class="badge-cefr">Pre-K → 12</div>
+</header>
+
+<!-- STEPS BAR -->
+<div class="steps-bar">
+  <div class="step-item">
+    <div class="step-dot active" id="dot1">1</div>
+    <span class="step-label active" id="lbl1">Grado</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-item">
+    <div class="step-dot" id="dot2">2</div>
+    <span class="step-label" id="lbl2">Scenario</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-item">
+    <div class="step-dot" id="dot3">3</div>
+    <span class="step-label" id="lbl3">Theme</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-item">
+    <div class="step-dot" id="dot4">4</div>
+    <span class="step-label" id="lbl4">Skill</span>
+  </div>
+  <div class="step-connector"></div>
+  <div class="step-item">
+    <div class="step-dot" id="dot5">5</div>
+    <span class="step-label" id="lbl5">Extras</span>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="installBanner">
+  <div>📲</div>
+  <div class="install-text"><strong>Instala EnglishGen</strong><br>Agrega al inicio para usarla sin internet</div>
+  <button class="install-btn" id="installBtn">Instalar</button>
+  <button class="install-close" id="installClose">✕</button>
+</div>
+
+<!-- MAIN -->
+<main class="main" id="mainContent">
+
+  <!-- STEP 1: GRADE -->
+  <div id="step1" class="animate-in">
+    <div class="section-header">
+      <div class="section-eyebrow">Paso 1 de 5</div>
+      <div class="section-title">¿Qué grado?</div>
+      <div class="section-desc">Selecciona el grado para cargar los scenarios del currículo.</div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Grado <span class="required">*</span></div>
+      <div class="select-wrap">
+        <select id="gradeSelect" onchange="onGradeChange()">
+          <option value="">— Seleccionar grado —</option>
+          <option value="Pre-K">Pre-Kinder (Pre A1.1)</option>
+          <option value="Kinder">Kinder (Pre A1.2)</option>
+          <option value="Grade 1">Grado 1 (Pre A1.3)</option>
+          <option value="Grade 2">Grado 2 (Pre A1.4)</option>
+          <option value="Grade 3">Grado 3 (A1.1)</option>
+          <option value="Grade 4">Grado 4 (A1.2)</option>
+          <option value="Grade 5">Grado 5 (A1.3)</option>
+          <option value="Grade 6">Grado 6 (A2.1)</option>
+          <optgroup label="── Secundaria ──────────">
+          <option value="Grade 7">Grado 7 (A2.2)</option>
+          <option value="Grade 8">Grado 8 (A2.3)</option>
+          <option value="Grade 9">Grado 9 (A2.4)</option>
+          <option value="Grade 10">Grado 10 (B1.1)</option>
+          <option value="Grade 11">Grado 11 (B1.2)</option>
+          <option value="Grade 12">Grado 12 (B1.3)</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    <div id="scenarioSection" style="display:none;" class="animate-in">
+      <div class="field-group">
+        <div class="field-label">Scenario <span class="required">*</span></div>
+        <div id="scenarioList" class="scenario-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: THEME (shown after scenario selected) -->
+  <div id="step2" style="display:none;">
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-eyebrow">Paso 2 de 5</div>
+      <div class="section-title">¿Cuál theme?</div>
+      <div class="section-desc">Cada scenario tiene 2 themes. Puedes seleccionar uno o ambos.</div>
+    </div>
+
+    <!-- Curriculum card preview -->
+    <div id="curriculumCard" class="curriculum-card"></div>
+
+    <div class="field-group">
+      <div class="field-label">Theme(s) <span class="required">*</span></div>
+      <div id="themeList" class="theme-pills"></div>
+    </div>
+  </div>
+
+  <!-- STEP 3: SKILL -->
+  <div id="step3" style="display:none;">
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-eyebrow">Paso 3 de 5</div>
+      <div class="section-title">¿Qué skill(s)?</div>
+      <div class="section-desc">Selecciona una o más habilidades comunicativas.</div>
+    </div>
+    <div class="field-group">
+      <div class="skill-grid" id="skillGrid">
+        <button class="skill-btn" data-skill="listening" onclick="toggleSkill(this)">
+          <div class="skill-icon">👂</div>
+          <span class="skill-name">Listening</span>
+        </button>
+        <button class="skill-btn" data-skill="speaking" onclick="toggleSkill(this)">
+          <div class="skill-icon">🗣️</div>
+          <span class="skill-name">Speaking</span>
+        </button>
+        <button class="skill-btn" data-skill="reading" onclick="toggleSkill(this)">
+          <div class="skill-icon">📖</div>
+          <span class="skill-name">Reading</span>
+        </button>
+        <button class="skill-btn" data-skill="writing" onclick="toggleSkill(this)">
+          <div class="skill-icon">✍️</div>
+          <span class="skill-name">Writing</span>
+        </button>
+        <button class="skill-btn" data-skill="mediation" onclick="toggleSkill(this)" style="grid-column: span 2;">
+          <div class="skill-icon">🤝</div>
+          <span class="skill-name">Mediation</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: OPTIONAL EXTRAS -->
+  <div id="step4" style="display:none;">
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-eyebrow">Paso 4 de 5</div>
+      <div class="section-title">Detalles opcionales</div>
+      <div class="section-desc">Enriquece la generación con objetivos y resultados específicos.</div>
+    </div>
+
+    <div class="optional-section">
+      <div class="optional-toggle" onclick="toggleOptional('smartObj')">
+        <div class="optional-toggle-label">
+          <div class="opt-icon">🎯</div>
+          Objetivos SMART
+        </div>
+        <span class="optional-chevron" id="chevron-smartObj">⌄</span>
+      </div>
+      <div class="optional-body" id="body-smartObj">
+        <div class="field-group" style="margin-bottom:0; margin-top:10px;">
+          <textarea id="smartObjectives" placeholder="Ej: Al finalizar la sesión, el estudiante podrá nombrar 5 prendas de vestir tradicionales de Panamá usando el presente simple..." rows="3"></textarea>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
+          Specific · Measurable · Achievable · Relevant · Time-bound
+        </div>
+      </div>
+    </div>
+
+    <div class="optional-section">
+      <div class="optional-toggle" onclick="toggleOptional('learningOut')">
+        <div class="optional-toggle-label">
+          <div class="opt-icon">📋</div>
+          Learning Outcomes
+        </div>
+        <span class="optional-chevron" id="chevron-learningOut">⌄</span>
+      </div>
+      <div class="optional-body" id="body-learningOut">
+        <div class="field-group" style="margin-bottom:0; margin-top:10px;">
+          <textarea id="learningOutcomes" placeholder="Ej: Can describe clothing items using basic adjectives. Can ask and answer simple questions about traditional dress..." rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="optional-section">
+      <div class="optional-toggle" onclick="toggleOptional('addContext')">
+        <div class="optional-toggle-label">
+          <div class="opt-icon">💬</div>
+          Contexto adicional
+        </div>
+        <span class="optional-chevron" id="chevron-addContext">⌄</span>
+      </div>
+      <div class="optional-body" id="body-addContext">
+        <div class="field-group" style="margin-bottom:0; margin-top:10px;">
+          <textarea id="additionalContext" placeholder="Ej: Grupo de 28 estudiantes, nivel heterogéneo, acceso a tablets en el aula, primera sesión del trimestre..." rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: REVIEW -->
+  <div id="step5" style="display:none;">
+    <div class="section-header" style="margin-top:8px;">
+      <div class="section-eyebrow">Paso 5 de 5</div>
+      <div class="section-title">Revisión final</div>
+      <div class="section-desc">Confirma tu selección antes de generar las actividades.</div>
+    </div>
+
+    <div id="reviewCard" class="selection-summary visible">
+      <div class="summary-label">Configuración seleccionada</div>
+      <div id="reviewContent"></div>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <div style="font-size:13px; color:var(--text-muted); font-weight:500;">Idioma de las instrucciones:</div>
+      <button id="langToggleBtn" onclick="toggleLang()" style="
+        display:flex; align-items:center; gap:5px;
+        padding:7px 14px; border-radius:20px;
+        border:1.5px solid #1D9E75;
+        background:rgba(29,158,117,0.1);
+        color:#1D9E75;
+        font-size:13px; font-weight:700;
+        cursor:pointer;
+      ">🇪🇸 ES</button>
+    </div>
+
+    <div style="background: rgba(0,184,150,0.07); border: 1.5px solid rgba(0,184,150,0.2); border-radius: var(--radius); padding: 14px; margin-bottom: 16px;">
+      <div style="font-family:'Syne',sans-serif; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px; display:flex; align-items:center; gap:7px;">
+        <span style="font-size:16px;">✨</span> El agente generará:
+      </div>
+      <div style="font-size:12px; color:var(--text-muted); line-height:1.8;" id="willGenerate">
+        — Selecciona tus preferencias para ver el resumen —
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="cta-row">
+    <button class="btn-secondary" id="backBtn" onclick="goBack()" style="display:none;">‹</button>
+    <button class="btn-primary" id="nextBtn" onclick="goNext()" disabled>
+      <span id="nextBtnLabel">Selecciona un grado</span>
+      <span id="nextBtnArrow">→</span>
+    </button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// CURRICULUM DATA
+// ══════════════════════════════════════════════
+const SECONDARY_CURRICULUM = {"Grade 7":{"level":"A2.2","scenarios":[{"id":1,"title":"Our New Classmates","themes":["Where are you from?","What was Your Previous School Like?"]},{"id":2,"title":"Panama's Wildlife","themes":["The Habitat of Wildlife","The Daily Habits of Animals"]},{"id":3,"title":"Legends of Panama","themes":["My Favorite Legend","Once upon a Time…"]},{"id":4,"title":"The Importance of Water","themes":["How We Use Water Everyday","Clean Water Is Important Because…"]},{"id":5,"title":"The Town Square","themes":["Here Is a Map of the Town.","Look at the Traditional and Modern Building Materials."]},{"id":6,"title":"Arts and Crafts","themes":["This Is a Historical Building.","This Is a Local Artist."]},{"id":7,"title":"The Healing Plants of Panama","themes":["The Soothing Guanábana","Sábila Is Helpful for Burns."]},{"id":8,"title":"Famous Panamanians","themes":["I Love These Entertainers.","My Favorite Athletes!"]}]},"Grade 8":{"level":"A2.3","scenarios":[{"id":1,"title":"Cultural Connections","themes":["I Celebrate This Tradition Because...","In This Region, They Have a Custom Of..."]},{"id":2,"title":"The Power of Education","themes":["This Trimester, I Am Learning About...","Next Trimester, I Plan to Learn..."]},{"id":3,"title":"My Favorite Book/Movie","themes":["My Favorite Movie Is... Because...","I Liked Your Presentation Because..."]},{"id":4,"title":"Sustainable Living","themes":["In the Past, People Didn't Recycle as Much as They Do Now","You Can Save Water By..."]},{"id":5,"title":"Career Goals","themes":["I Want to Be a Doctor Because...","To Become a Doctor, First I Will Need To..."]},{"id":6,"title":"Learning from Our Mistakes","themes":["What Can I Learn from This Experience?","Next Time, I Will Study Harder to Avoid..."]},{"id":7,"title":"A Day Without Technology","themes":["Pros and Cons","Tech-Free or Tech Bound?"]},{"id":8,"title":"Planning for My Future Education","themes":["I Expect My Future to Be...","My Personal Goals for the Future Include..."]}]},"Grade 9":{"level":"A2.4","scenarios":[{"id":1,"title":"A Guide to Panama","themes":["Our Historical Sites","Take a Trip to the Panama Canal"]},{"id":2,"title":"Technology in Education","themes":["The Use of Technology in School","When It's Better to Ignore Technology"]},{"id":3,"title":"Renewable Energy in Panama","themes":["What Is Renewable Energy?","Why Is Renewable Energy Important for Panama?"]},{"id":4,"title":"Our Indigenous Heritage","themes":["Learning About Our Diverse Cultures","Researching Our History"]},{"id":5,"title":"Transportation in Panama","themes":["The Benefits of Public Transportation","Rules of the Road"]},{"id":6,"title":"Wellness: A Way of Life","themes":["How Exercise Helps My Body","The Benefits of Mindfulness"]},{"id":7,"title":"We Are What We Eat!","themes":["Why Is Nutrition Important?","Healthy Food for a Balanced Diet"]},{"id":8,"title":"Our Wonderful Ocean","themes":["The Animals in Our Waters","Plants That Live in the Ocean"]}]},"Grade 10":{"level":"B1.1","scenarios":[{"id":1,"title":"Let's Start a Club!","themes":["There Are So Many Types of Clubs!","Learning to Manage a Club"]},{"id":2,"title":"Advice for Success","themes":["Academic Achievement and Skill Development: How?","My Advice for a Ninth Grader"]},{"id":3,"title":"Study Habits for Success","themes":["Learning to Manage Time","How I Learned to Focus"]},{"id":4,"title":"Learning to Research History","themes":["I Learned About the History of Panama","So Many Different Historical Events to Learn!"]},{"id":5,"title":"Planning for a Friend's Visit","themes":["Interesting Things to See","Unique Facts About My Area"]},{"id":6,"title":"The Past and Future of Fashion","themes":["How History Is Fashionable","What Is Sustainable Fashion?"]},{"id":7,"title":"Dream Jobs","themes":["What Are the Jobs of the Future?","What Skills Do I Need for a Future Career?"]},{"id":8,"title":"Our Time Capsule","themes":["How I Am Preparing for the Next Five Years","In Ten Years, I Will..."]}]},"Grade 11":{"level":"B1.2","scenarios":[{"id":1,"title":"Our Town Council","themes":["How Our Town Operates","How We Share Our Voice in the Community"]},{"id":2,"title":"Our Changing Forests","themes":["I Explored the Ecological History Of...","How Our Ecology Is Changing"]},{"id":3,"title":"Managing Stress in Changing Times","themes":["Breathing to Relax","Forest Bathing and Other Biohacks"]},{"id":4,"title":"Preserving Our Heritage","themes":["Learning How We Take Care of Our Past","What Should We Preserve in the Future?"]},{"id":5,"title":"Panama's Role in the World","themes":["The Importance of Panama in Global Trade","How the Canal Impacts Panama's Future"]},{"id":6,"title":"Entrepreneurial Spirit","themes":["How to Market a Business Idea","My Genius Innovations"]},{"id":7,"title":"Intelligent Robots","themes":["How Technology Changes Society","What is Artificial Intelligence?"]},{"id":8,"title":"International English","themes":["How English Is Used in Workplaces Globally","What Communication Skills Are Important in the Workplace?"]}]},"Grade 12":{"level":"B1.3","scenarios":[{"id":1,"title":"Supporting Our Community","themes":["How Does the Government Support Communities?","Volunteering in Our Community"]},{"id":2,"title":"My Personal Success Story","themes":["How I Am Successful","Saving for Future Goals!"]},{"id":3,"title":"Exploring Our Global Community","themes":["A Dream Trip Around the World","What Can I Learn From Other Cultures?"]},{"id":4,"title":"International Communication","themes":["Introducing Panama to the World","Communicating Panama's Importance"]},{"id":5,"title":"Robots on Earth and in Space","themes":["How Robots Are Used in Panama","The Future Exploration of Space"]},{"id":6,"title":"Checking in on Health","themes":["Using Health Technology to Form Good Habits","Healthy Minds for Healthy Bodies"]},{"id":7,"title":"Learning to Balance","themes":["How to Balance Social and School Activities","Learning to Relax"]},{"id":8,"title":"My Multilingual Self","themes":["The Benefits of Multilingualism","Language Is an Important Skill"]}]}};
+const CURRICULUM = {"Pre-K":{"level":"Pre A1.1","scenarios":[{"id":1,"title":"Meeting New Friends","themes":["Meeting My Friends","Saying Please and Thank You"]},{"id":2,"title":"Exploring Our Classroom","themes":["Things in My Classroom","Colors in My Classroom"]},{"id":3,"title":"Me and My Family","themes":["This Is Me!","My Family"]},{"id":4,"title":"Let's Eat!","themes":["I Love Fruit!","I Eat Vegetables!"]},{"id":5,"title":"Numbers Around Me","themes":["Let's Count to Five!","How Many?"]},{"id":6,"title":"Fun with Letters","themes":["The A-B-Cs","Apple, Banana, Coconut"]},{"id":7,"title":"Inside My School!","themes":["My Teacher!","Time for Recess!"]},{"id":8,"title":"Panama's Plants and Animals","themes":["It's a Plant.","It's an Animal."]}]},"Kinder":{"level":"Pre A1.2","scenarios":[{"id":1,"title":"It's a School Day!","themes":["Let's Listen!","Stand Up!"]},{"id":2,"title":"Our Routines","themes":["First, I Sit Down.","Pick It Up!"]},{"id":3,"title":"Hold Up Ten Fingers!","themes":["I Can Count!","All the Pencils!"]},{"id":4,"title":"Where Is It?","themes":["Where Is Your Book?","Go to the Window."]},{"id":5,"title":"What's that Sound?","themes":["The Cat Says 'Meow'.","That's a Rooster!"]},{"id":6,"title":"Let's Dance!","themes":["Move Around","One Step In, Two Steps Out!"]},{"id":7,"title":"I'm Happy.","themes":["I'm Excited!","How Are You?"]},{"id":8,"title":"I Like School!","themes":["I Like Games!","I Like Math!"]}]},"Grade 1":{"level":"Pre A1.3","scenarios":[{"id":1,"title":"All Week Long!","themes":["Today Is Tuesday!","It's the Weekend."]},{"id":2,"title":"Nice Weather Today!","themes":["It's Sunny!","It's Raining."]},{"id":3,"title":"Colors in Our World","themes":["That's a Purple Flower.","It's an Orange Cat."]},{"id":4,"title":"My Family and I","themes":["It's My Family!","She Is My Mom!"]},{"id":5,"title":"Colors of Things that Go","themes":["That's a Blue Bus.","That's a Red Bike."]},{"id":6,"title":"Shapes Around Us","themes":["I See a Rectangle.","That Is a Circle."]},{"id":7,"title":"Shapes on Our Plates","themes":["It's a Square Cracker.","It's a Round Orange."]},{"id":8,"title":"It's Our Garden.","themes":["The Pink Flowers!","A Tall Tree!"]}]},"Grade 2":{"level":"Pre A1.4","scenarios":[{"id":1,"title":"School Days","themes":["Yesterday Was Wednesday.","Today Is Friday!"]},{"id":2,"title":"School Life Adventures","themes":["That's a Big Book!","That's a Small, Brown Bag."]},{"id":3,"title":"All About the Weather","themes":["A Perfect Day!","Dress for the Weather."]},{"id":4,"title":"All About My Body","themes":["Head to Toes!","Hats and Shoes!"]},{"id":5,"title":"Exploring My Community","themes":["It's the Park!","It's the Market!"]},{"id":6,"title":"Discovering Nature's Wonders","themes":["It's the Rainforest.","It's a Slow, Furry Sloth!"]},{"id":7,"title":"Fun Outdoors!","themes":["I Love to Run!","I Like to Swim."]},{"id":8,"title":"It's Festival Season.","themes":["Look at the Fireworks!","Food I Eat During a Celebration"]}]},"Grade 3":{"level":"A1.1","scenarios":[{"id":1,"title":"Places I Can Go","themes":["I'm at School.","I'm at the Market."]},{"id":2,"title":"A Polite Request","themes":["Can I Have a Pencil?","Sorry, I Can't Help You."]},{"id":3,"title":"Discovering Our Classroom","themes":["What's in Your Bag?","The Book Is on the Table."]},{"id":4,"title":"This Beautiful Day","themes":["It's Sunny. I'm Happy!","It's Raining! I Need an Umbrella."]},{"id":5,"title":"Let's Go Shopping!","themes":["One, Two, Three Bananas!","I Want Five Pineapples."]},{"id":6,"title":"I Can Connect with Nature!","themes":["I Can Relax and Listen.","I'm Outside. I'm Happy!"]},{"id":7,"title":"It's Time to Eat.","themes":["What's Your Favorite Food?","I Like Sancocho!"]},{"id":8,"title":"My Evening Routine","themes":["First, I Brush My Teeth.","I'm Sleepy. It's Bedtime."]}]},"Grade 4":{"level":"A1.2","scenarios":[{"id":1,"title":"A Walk in the Neighborhood","themes":["This Is My Favorite.","It's the Best!"]},{"id":2,"title":"Helping in the Garden","themes":["The Tomatoes Grow Quickly.","These Plants Are from Panama."]},{"id":3,"title":"Shopping at the Market","themes":["How Much Is the Pineapple?","I Need Five Yucas."]},{"id":4,"title":"Visiting the Panama Canal","themes":["The Vessels Are Big Because...","A Vessel Is Crossing!"]},{"id":5,"title":"A Trip to the Beach","themes":["Let's Pack for a Trip.","I Always Pack Lunch."]},{"id":6,"title":"It's the Rainy Season","themes":["Where's the Puddle?","I Need an Umbrella."]},{"id":7,"title":"The Beautiful Mola","themes":["A Mola Has Many Colors!","I Can Make a Mola."]},{"id":8,"title":"Our Traditional Style of Dress","themes":["She Is Wearing a Pollera.","Let's Dress for a Dance."]}]},"Grade 5":{"level":"A1.3","scenarios":[{"id":1,"title":"Following Instructions at School","themes":["First, I Cut the Paper.","Let's Make a Poster!"]},{"id":2,"title":"Taking Care of Our Class","themes":["We Are Sweeping the Floors.","Let's Arrange the Chairs."]},{"id":3,"title":"The Local Farm Stand","themes":["I Need Two Papayas, Please.","How Much Are the Bananas?"]},{"id":4,"title":"Helping Around the House","themes":["I Wash the Dishes Every day.","We All Do Chores."]},{"id":5,"title":"Time for Exercise","themes":["I Like Walking in the Afternoon.","We Can Swim."]},{"id":6,"title":"Recycling for Our World","themes":["We Recycle Plastic Bottles Every Day.","Composting Is Easy."]},{"id":7,"title":"Conservation Morning, Noon, and Night!","themes":["Let's Get Cool in the Shade.","Turn Off the Lights, Please."]},{"id":8,"title":"Planning Meals for My Family","themes":["Fruits and Vegetables Are Good for You.","Panama Has Delicious Food!"]}]},"Grade 6":{"level":"A2.1","scenarios":[{"id":1,"title":"Our Community News","themes":["Reporting From the School!","Our Community Is Famous For..."]},{"id":2,"title":"Keeping Our Communities Clean","themes":["We Should Clean the Classroom on Friday.","Who Will Bring the Cleaning Supplies?"]},{"id":3,"title":"Our Local Library","themes":["Let's Find a Book!","How Do I Use the Library?"]},{"id":4,"title":"Our Classroom News","themes":["I Will Write the Article About Our School Trip.","We Need Pictures for the Classroom Newsletter."]},{"id":5,"title":"Our Amazing Community","themes":["This Is My Amazing Community.","This School Has Been Here a Long Time!"]},{"id":6,"title":"Our Weather Report","themes":["Today's Weather Will Be Sunny with Some Rain Later.","How Will the Weather Change Tomorrow?"]},{"id":7,"title":"Our Changing Forests","themes":["We Must Protect Our Trees.","Recycling Helps Our Planet."]},{"id":8,"title":"The Talents Around Us","themes":["Who Will Perform in the Fiestas Patrias Activities?","I Will Play the Drums in the Parade."]}]}};
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let outputLang = 'es'; // 'es' = Spanish, 'en' = English
+
+let state = {
+  currentStep: 1,
+  grade: null,
+  scenario: null,
+  themes: [],
+  skills: [],
+  smartObjectives: '',
+  learningOutcomes: '',
+  additionalContext: ''
+};
+
+// ══════════════════════════════════════════════
+// STEPS LOGIC
+// ══════════════════════════════════════════════
+function updateStepUI() {
+  const s = state.currentStep;
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.className = 'step-dot' + (i < s ? ' done' : i === s ? ' active' : '');
+    lbl.className = 'step-label' + (i < s ? ' done' : i === s ? ' active' : '');
+    if (i < s) { dot.textContent = '✓'; } else { dot.textContent = i; }
+  }
+  // Show/hide sections
+  const sections = { 1: 'step1', 2: 'step2', 3: 'step3', 4: 'step4', 5: 'step5' };
+  Object.entries(sections).forEach(([num, id]) => {
+    const el = document.getElementById(id);
+    if (parseInt(num) <= s) {
+      el.style.display = 'block';
+    }
+  });
+
+  // Scroll step into view  
+  const activeSection = document.getElementById(sections[s]);
+  if (activeSection && s > 1) {
+    setTimeout(() => activeSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+
+  // Back button
+  document.getElementById('backBtn').style.display = s > 1 ? 'flex' : 'none';
+
+  updateNextBtn();
+}
+
+function updateNextBtn() {
+  const btn = document.getElementById('nextBtn');
+  const lbl = document.getElementById('nextBtnLabel');
+  const s = state.currentStep;
+
+  let enabled = false;
+  let label = '';
+  let isReady = false;
+
+  if (s === 1) {
+    enabled = !!state.scenario;
+    label = state.scenario ? 'Siguiente: Elegir Theme →' : 'Selecciona un scenario';
+  } else if (s === 2) {
+    enabled = state.themes.length > 0;
+    label = enabled ? 'Siguiente: Elegir Skill →' : 'Selecciona al menos 1 theme';
+  } else if (s === 3) {
+    enabled = state.skills.length > 0;
+    label = enabled ? 'Siguiente: Opcionales →' : 'Selecciona al menos 1 skill';
+  } else if (s === 4) {
+    enabled = true;
+    label = 'Siguiente: Revisar →';
+  } else if (s === 5) {
+    enabled = true;
+    label = '✨ Generar actividades';
+    isReady = true;
+  }
+
+  btn.disabled = !enabled;
+  lbl.textContent = label;
+  btn.className = 'btn-primary' + (isReady ? ' ready' : '');
+  document.getElementById('nextBtnArrow').style.display = isReady ? 'none' : 'inline';
+}
+
+function goNext() {
+  if (state.currentStep === 5) {
+    generateActivities();
+    return;
+  }
+  if (state.currentStep === 2 && state.themes.length > 0) {
+    // show step3
+  }
+  if (state.currentStep === 4) {
+    state.smartObjectives = document.getElementById('smartObjectives').value;
+    state.learningOutcomes = document.getElementById('learningOutcomes').value;
+    state.additionalContext = document.getElementById('additionalContext').value;
+    buildReviewCard();
+  }
+  state.currentStep++;
+  updateStepUI();
+}
+
+function goBack() {
+  if (state.currentStep > 1) {
+    state.currentStep--;
+    updateStepUI();
+    const sections = { 1: 'step1', 2: 'step2', 3: 'step3', 4: 'step4', 5: 'step5' };
+    for (let i = state.currentStep + 1; i <= 5; i++) {
+      document.getElementById(sections[i]).style.display = 'none';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+// GRADE CHANGE
+// ══════════════════════════════════════════════
+function onGradeChange() {
+  const grade = document.getElementById('gradeSelect').value;
+  state.grade = grade;
+  state.scenario = null;
+  state.themes = [];
+  state.skills = [];
+
+  // Reset CEFR badge
+  const badge = document.getElementById('cefrBadge');
+  if (grade && (CURRICULUM[grade] || SECONDARY_CURRICULUM[grade] || SECONDARY_CURRICULUM[grade])) {
+    badge.textContent = (CURRICULUM[grade] || SECONDARY_CURRICULUM[grade]).level;
+    badge.classList.add('active');
+  } else {
+    badge.textContent = 'Pre-K → 12';
+    badge.classList.remove('active');
+  }
+
+  if (!grade) {
+    document.getElementById('scenarioSection').style.display = 'none';
+    return;
+  }
+
+  renderScenarios(grade);
+  document.getElementById('scenarioSection').style.display = 'block';
+  document.getElementById('scenarioSection').classList.add('animate-in');
+  updateNextBtn();
+}
+
+function renderScenarios(grade) {
+  const data = CURRICULUM[grade] || SECONDARY_CURRICULUM[grade];
+  const container = document.getElementById('scenarioList');
+  container.innerHTML = '';
+
+  data.scenarios.forEach(sc => {
+    const el = document.createElement('div');
+    el.className = 'scenario-card';
+    el.dataset.scenarioId = sc.id;
+    el.innerHTML = `
+      <div class="scenario-num">${sc.id}</div>
+      <div class="scenario-info">
+        <div class="scenario-title">${sc.title}</div>
+        <div class="scenario-themes-preview">${sc.themes.join(' · ')}</div>
+      </div>
+      <div class="scenario-check">✓</div>
+    `;
+    el.onclick = () => selectScenario(sc.id, el);
+    container.appendChild(el);
+  });
+}
+
+function selectScenario(id, el) {
+  // Deselect all
+  document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const grade = state.grade;
+  const sc = (CURRICULUM[grade] || SECONDARY_CURRICULUM[grade]).scenarios.find(s => s.id === id);
+  state.scenario = sc;
+  state.themes = [];
+
+  // Show step 2 with themes
+  renderThemes(sc);
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('step2').classList.add('animate-in');
+
+  // Build curriculum card
+  buildCurriculumCard(grade, sc);
+
+  updateNextBtn();
+  setTimeout(() => {
+    document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
+function renderThemes(sc) {
+  const container = document.getElementById('themeList');
+  container.innerHTML = '';
+  sc.themes.forEach((theme, idx) => {
+    const el = document.createElement('div');
+    el.className = 'theme-pill';
+    el.innerHTML = `
+      <div class="theme-num">${idx + 1}</div>
+      <span class="theme-text">${theme}</span>
+    `;
+    el.onclick = () => toggleTheme(theme, el);
+    container.appendChild(el);
+  });
+}
+
+function toggleTheme(theme, el) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) {
+    if (!state.themes.includes(theme)) state.themes.push(theme);
+  } else {
+    state.themes = state.themes.filter(t => t !== theme);
+  }
+  updateNextBtn();
+}
+
+function buildCurriculumCard(grade, sc) {
+  const data = CURRICULUM[grade] || SECONDARY_CURRICULUM[grade];
+  const card = document.getElementById('curriculumCard');
+  card.classList.add('visible');
+  card.innerHTML = `
+    <div class="curriculum-card-header">
+      <div class="curriculum-card-title">Scenario ${sc.id}: ${sc.title}</div>
+      <div class="cefr-pill">${data.level}</div>
+    </div>
+    <div class="curriculum-meta">
+      <span class="curriculum-tag">${grade}</span>
+      <span class="curriculum-tag">8 scenarios</span>
+      <span class="curriculum-tag">5 skills</span>
+    </div>
+    <div class="curriculum-themes-label">Themes en este scenario</div>
+    ${sc.themes.map((t, i) => `
+      <div class="curriculum-theme-item">
+        <div class="curriculum-theme-dot"></div>
+        <span>Theme ${i + 1}: ${t}</span>
+      </div>
+    `).join('')}
+  `;
+}
+
+// ══════════════════════════════════════════════
+// SKILLS
+// ══════════════════════════════════════════════
+function toggleSkill(btn) {
+  btn.classList.toggle('selected');
+  const skill = btn.dataset.skill;
+  if (btn.classList.contains('selected')) {
+    if (!state.skills.includes(skill)) state.skills.push(skill);
+  } else {
+    state.skills = state.skills.filter(s => s !== skill);
+  }
+  updateNextBtn();
+}
+
+// ══════════════════════════════════════════════
+// OPTIONAL TOGGLES
+// ══════════════════════════════════════════════
+function toggleOptional(id) {
+  const body = document.getElementById('body-' + id);
+  const chevron = document.getElementById('chevron-' + id);
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// REVIEW CARD
+// ══════════════════════════════════════════════
+function buildReviewCard() {
+  const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+  const rc = document.getElementById('reviewContent');
+  rc.innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:7px; margin-bottom:10px;">
+      <span class="summary-chip chip-grade">📚 ${state.grade}</span>
+      <span class="summary-chip chip-scenario">📍 S${state.scenario.id}: ${state.scenario.title}</span>
+      ${state.themes.map(t => `<span class="summary-chip chip-theme">🏷 ${t}</span>`).join('')}
+      ${state.skills.map(s => `<span class="summary-chip chip-skill">${skillEmojis[s]} ${s.charAt(0).toUpperCase()+s.slice(1)}</span>`).join('')}
+    </div>
+    ${state.smartObjectives ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px;padding:8px 10px;background:#f8f9fa;border-radius:8px;border-left:3px solid var(--amber)"><strong style="color:var(--navy)">SMART:</strong> ${state.smartObjectives.substring(0,120)}${state.smartObjectives.length>120?'…':''}</div>` : ''}
+    ${state.learningOutcomes ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;padding:8px 10px;background:#f8f9fa;border-radius:8px;border-left:3px solid var(--teal)"><strong style="color:var(--navy)">Outcomes:</strong> ${state.learningOutcomes.substring(0,120)}${state.learningOutcomes.length>120?'…':''}</div>` : ''}
+  `;
+
+  // Will generate text
+  const wg = document.getElementById('willGenerate');
+  const skillNames = state.skills.map(s => s.charAt(0).toUpperCase()+s.slice(1));
+  const themeNames = state.themes.join(' y ');
+  wg.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      ${state.skills.map(s => `<div>• Actividades de <strong>${s.charAt(0).toUpperCase()+s.slice(1)}</strong> alineadas al currículo ${state.grade} · ${state.scenario.title}</div>`).join('')}
+      <div>• Vocabulario y gramática del nivel <strong>${(CURRICULUM[state.grade] || SECONDARY_CURRICULUM[state.grade]).level}</strong></div>
+      <div>• Tema: <strong>${themeNames}</strong></div>
+      <div style="margin-top:4px;color:var(--teal);font-weight:500">→ Exportables como PDF y DOCX</div>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+// GENERATE (stub for Module 2)
+// ══════════════════════════════════════════════
+function toggleLang() {
+  outputLang = outputLang === 'es' ? 'en' : 'es';
+  const btn = document.getElementById('langToggleBtn');
+  if (outputLang === 'en') {
+    btn.innerHTML = '🇺🇸 EN';
+    btn.style.borderColor = '#185FA5';
+    btn.style.background = 'rgba(24,95,165,0.1)';
+    btn.style.color = '#185FA5';
+  } else {
+    btn.innerHTML = '🇪🇸 ES';
+    btn.style.borderColor = '#1D9E75';
+    btn.style.background = 'rgba(29,158,117,0.1)';
+    btn.style.color = '#1D9E75';
+  }
+}
+
+function generateActivities() {
+  // Collect final state
+  state.smartObjectives = document.getElementById('smartObjectives').value;
+  state.learningOutcomes = document.getElementById('learningOutcomes').value;
+  state.additionalContext = document.getElementById('additionalContext').value;
+
+  // Save to sessionStorage for Module 2 (generator page)
+  // Save language preference
+  sessionStorage.setItem('englishgen_lang', outputLang || 'es');
+
+  sessionStorage.setItem('englishgen_request', JSON.stringify({
+    grade: state.grade,
+    cefrLevel: (CURRICULUM[state.grade] || SECONDARY_CURRICULUM[state.grade]).level,
+    scenarioId: state.scenario.id,
+    scenarioTitle: state.scenario.title,
+    themes: state.themes,
+    skills: state.skills,
+    smartObjectives: state.smartObjectives,
+    learningOutcomes: state.learningOutcomes,
+    additionalContext: state.additionalContext,
+    timestamp: Date.now()
+  }));
+
+  // Redirect to Module 2 generator
+  window.location.href = 'generator.html';
+}
+
+function showGenerationPlaceholder() {
+  const main = document.getElementById('mainContent');
+  const skillEmojis = { listening:'👂', speaking:'🗣️', reading:'📖', writing:'✍️', mediation:'🤝' };
+  main.innerHTML = `
+    <div style="text-align:center; padding: 40px 20px 20px; animation: fadeSlideIn 0.3s ease-out;">
+      <div style="font-size:56px; margin-bottom:16px;">✅</div>
+      <div style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--navy); margin-bottom:8px; letter-spacing:-0.5px;">
+        ¡Solicitud lista!
+      </div>
+      <div style="font-size:14px; color:var(--text-muted); line-height:1.6; margin-bottom:28px;">
+        El Módulo 2 (generador IA) tomará esto y producirá las actividades.
+      </div>
+
+      <div style="background:white; border:1.5px solid var(--border); border-radius:var(--radius); padding:20px; text-align:left; margin-bottom:20px; box-shadow:var(--shadow);">
+        <div style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">Datos del request generado</div>
+        
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+          <div style="background:var(--navy); color:white; border-radius:8px; padding:4px 10px; font-family:'Syne',sans-serif; font-size:12px; font-weight:600;">${state.grade}</div>
+          <div style="background:rgba(0,184,150,0.1); color:#007a63; border-radius:8px; padding:4px 10px; font-family:'Syne',sans-serif; font-size:12px; font-weight:600;">${(CURRICULUM[state.grade] || SECONDARY_CURRICULUM[state.grade]).level}</div>
+        </div>
+
+        <div style="font-size:13px; color:var(--text); margin-bottom:4px;"><strong>Scenario:</strong> ${state.scenario.id} — ${state.scenario.title}</div>
+        <div style="font-size:13px; color:var(--text); margin-bottom:4px;"><strong>Themes:</strong> ${state.themes.join(' + ')}</div>
+        <div style="font-size:13px; color:var(--text); margin-bottom:12px;"><strong>Skills:</strong> ${state.skills.map(s=>skillEmojis[s]+' '+s).join(', ')}</div>
+
+        <div style="background:#f0faf7; border-radius:10px; padding:12px; border:1px solid rgba(0,184,150,0.2);">
+          <div style="font-size:11px; font-weight:600; color:var(--teal); margin-bottom:6px; letter-spacing:0.5px; text-transform:uppercase;">JSON generado (sessionStorage)</div>
+          <pre style="font-size:10px; color:var(--navy); overflow-x:auto; white-space:pre-wrap; line-height:1.5; font-family:monospace;">${JSON.stringify(JSON.parse(sessionStorage.getItem('englishgen_request')), null, 2)}</pre>
+        </div>
+      </div>
+
+      <div style="background:rgba(245,166,35,0.1); border:1.5px dashed rgba(245,166,35,0.4); border-radius:var(--radius); padding:14px; text-align:left; margin-bottom:20px;">
+        <div style="font-family:'Syne',sans-serif; font-size:12px; font-weight:600; color:#8a5c00; margin-bottom:5px;">🚧 Módulo 2: Generador IA — Próximamente</div>
+        <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+          El siguiente módulo recibirá este JSON, consultará la Claude API con los standards completos del currículo, y generará actividades descargables (PDF + DOCX) para el aula.
+        </div>
+      </div>
+
+      <button onclick="resetApp()" style="width:100%; padding:14px; background:var(--navy); color:white; border:none; border-radius:var(--radius); font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer;">
+        ← Nueva solicitud
+      </button>
+    </div>
+  `;
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('backBtn').style.display = 'none';
+}
+
+function resetApp() {
+  state = { currentStep: 1, grade: null, scenario: null, themes: [], skills: [], smartObjectives: '', learningOutcomes: '', additionalContext: '' };
+  location.reload();
+}
+
+// ══════════════════════════════════════════════
+// PWA INSTALL
+// ══════════════════════════════════════════════
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('show');
+  }
+});
+document.getElementById('installClose').addEventListener('click', () => {
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+// Init
+updateNextBtn();
+</script>
+</body>
+</html>
