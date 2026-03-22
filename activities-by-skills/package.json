@@ -1,8 +1,0 @@
-{
-  "name": "activities-by-skills-backend",
-  "version": "1.0.0",
-  "description": "Proxy seguro para Activities By Skills Agent",
-  "dependencies": {
-    "@netlify/blobs": "^8.0.0"
-  }
-}
