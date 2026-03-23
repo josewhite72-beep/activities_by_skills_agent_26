@@ -4,34 +4,37 @@ const crypto = require('crypto');
 const KV_URL = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
+async function redis(command) {
+  const res = await fetch(KV_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${KV_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(command),
+  });
+  const data = await res.json();
+  return data.result;
+}
+
 async function kvGet(key) {
   try {
-    const res = await fetch(`${KV_URL}/get/${encodeURIComponent(key)}`, {
-      headers: { Authorization: `Bearer ${KV_TOKEN}` }
-    });
-    const data = await res.json();
-    if (!data.result) return null;
-    try { return JSON.parse(data.result); } catch { return data.result; }
+    const result = await redis(['GET', key]);
+    if (!result) return null;
+    try { return JSON.parse(result); } catch { return result; }
   } catch { return null; }
 }
 
 async function kvSet(key, value) {
   try {
-    const res = await fetch(`${KV_URL}/set/${encodeURIComponent(key)}/${encodeURIComponent(JSON.stringify(value))}`, {
-      method: 'GET',
-      headers: { Authorization: `Bearer ${KV_TOKEN}` }
-    });
-    return await res.json();
+    await redis(['SET', key, JSON.stringify(value)]);
   } catch(e) { console.error('kvSet error:', e); }
 }
 
 async function kvKeys(prefix) {
   try {
-    const res = await fetch(`${KV_URL}/keys/${encodeURIComponent(prefix + '*')}`, {
-      headers: { Authorization: `Bearer ${KV_TOKEN}` }
-    });
-    const data = await res.json();
-    return data.result || [];
+    const result = await redis(['KEYS', prefix + '*']);
+    return result || [];
   } catch { return []; }
 }
 
