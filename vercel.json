@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/admin.js": { "maxDuration": 30 },
+    "api/generate.js": { "maxDuration": 30 }
+  }
+}
